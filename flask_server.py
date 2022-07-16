@@ -37,7 +37,8 @@ class Rebooter():
         user_login = os.getlogin()
         
     def rebootRouter(self, id):
-        result = subprocess.run(["/bin/bash", "/home/{}/proxyHobbit/reload.sh".format(self.user_login), "{}".format(id)],
+        result = subprocess.run(["/bin/bash", "/home/{}/proxyHobbit/reload.sh".format(self.user_login), 
+                                 "{}".format(id)],
                         timeout=15, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return result
 
@@ -48,8 +49,8 @@ app = Flask(__name__)
 def hello():
     return {"Ok":"True"}
 
-@app.route('/updateInterval/', methods=['GET'])
-def updateInterval():
+@app.route('/updatePortInterval/', methods=['GET'])
+def updatePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
         interval = request.args.get('interval')
@@ -60,8 +61,8 @@ def updateInterval():
         
         return {"Message":"Bad request!"}
 
-@app.route('/removeInterval/', methods=['GET'])
-def removeInterval():
+@app.route('/removePortInterval/', methods=['GET'])
+def removePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
         if id:
