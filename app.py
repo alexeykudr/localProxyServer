@@ -2,18 +2,17 @@ from flask import Flask
 from flask import request
 import os
 from crontab import CronTab
-import sys
 import subprocess
 
 # https://pypi.org/project/python-crontab/
 
 class CronJob():
     def __init__(self) -> None:
-        self.username = os.getlogin()
-        self.cron = CronTab(user=self.username)
+        self.user_login = os.environ["USER"]
+        self.cron = CronTab(user=self.user_login) 
 
     def newJob(self, portId: int, interval: int) -> None:
-        self.query_command = "/usr/bin/flock -w 0 /var/run/192.168.{}.100.lock /home/mac/proxyHobbit/reconnect.sh -r 4G  -i 192.168.{}.1 /etc/init.d/3proxy start192.168.{}.1 >/dev/null 2>&1".format(
+        self.query_command = "/usr/bin/flock -w 0 /var/run/192.168.{}.100.lock ./reconnect.sh -r 4G  -i 192.168.{}.1 /etc/init.d/3proxy start192.168.{}.1 >/dev/null 2>&1".format(
             portId, portId, portId)
         self.job = self.cron.new(command=self.query_command, comment=str(portId))
         self.job.minute.every(interval)
@@ -34,14 +33,13 @@ class CronJob():
 
 class Rebooter():
     def __init__(self) -> None:
-        user_login = os.getlogin()
+        self.user_login = os.environ["USER"]
         
     def rebootRouter(self, id):
-        result = subprocess.run(["/bin/bash", "/home/{}/proxyHobbit/reload.sh".format(self.user_login), 
+        result = subprocess.run(["/bin/bash", "/home/{}/localProxyServer/reload.sh".format(self.user_login), 
                                  "{}".format(id)],
                         timeout=15, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         return result
-
 
 
 app = Flask(__name__)
@@ -76,6 +74,7 @@ def rebootPort():
     if request.method == 'GET':
         id = request.args.get('id')
         if id:
+            print('want reboot {}'.format(id))
             rebooter_object.rebootRouter(id)
             return {"id": id}
         
@@ -89,3 +88,4 @@ if __name__ == "__main__":
     # 15 - portId , 25 - interval
     port = int(os.environ.get("PORT", 5000))
     app.run(debug=True,host='0.0.0.0',port=port)
+    
