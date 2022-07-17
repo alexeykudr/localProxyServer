@@ -12,7 +12,7 @@ class CronJob():
         self.cron = CronTab(user=self.user_login) 
 
     def newJob(self, portId: int, interval: int) -> None:
-        self.query_command = "/usr/bin/flock -w 0 /var/run/192.168.{}.100.lock ./reconnect.sh -r 4G  -i 192.168.{}.1 /etc/init.d/3proxy start192.168.{}.1 >/dev/null 2>&1".format(
+        self.query_command = "/usr/bin/flock -w 0 /var/run/192.168.{}.100.lock /home/mac/localProxyServer/reconnect.sh -r 4G  -i 192.168.{}.1 /etc/init.d/3proxy start192.168.{}.1 >/dev/null 2>&1".format(
             portId, portId, portId)
         self.job = self.cron.new(command=self.query_command, comment=str(portId))
         self.job.minute.every(interval)
@@ -86,6 +86,6 @@ if __name__ == "__main__":
     rebooter_object = Rebooter()
     # python3 cron.py -add 15 25
     # 15 - portId , 25 - interval
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8081))
     app.run(debug=True,host='0.0.0.0',port=port)
     
