@@ -35,8 +35,8 @@ class Configurator():
         
         
     def writeConfig(self):
-        file_path =f"/usr/local/3proxy/mob/3proxy{self.portId-10}.cfg"
-        # file_path = 'sample.cfg'
+        # file_path =f"/usr/local/3proxy/mob/3proxy{self.portId-10}.cfg"
+        file_path = 'sample.cfg'
         with open (file_path, 'w+') as example_conf:
             for line in self.config:
                 example_conf.writelines(line) 

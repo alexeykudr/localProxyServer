@@ -56,8 +56,8 @@ def setConfig():
         if portId is None:
             return {"Message": "Bad request!"}
         
-        username = request.values.get('user') # Your form's
-        password = request.values.get('pass') # input names
+        username = request.values.get('username') # Your form's
+        password = request.values.get('password') # input names
         
         if username == 'auto' and password == 'auto':
             username = router_api.get_random_string(8)
