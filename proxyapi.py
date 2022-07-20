@@ -17,14 +17,14 @@ class ProxyApi():
     def rebootRouter(self, id):
         # todo
         # want get ip addr bellow reload , it will be string
-        response_dict = dict()
-        response_dict["current_ip"] = self.getRouterIp(id)
+        # response_dict = dict()
+        # response_dict["current_ip"] = self.getRouterIp(id)
         
         result = subprocess.run(["/bin/bash", "/home/{}/localProxyServer/reload.sh".format(self.user_login),
                                  "{}".format(id)],
                                 timeout=15, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        response_dict["ip after change"] = self.getRouterIp(id)
-        print(response_dict)
+        # response_dict["ip after change"] = self.getRouterIp(id)
+        # print(response_dict)
         
         
     def newJob(self, portId: int, interval: int) -> None:
@@ -84,10 +84,9 @@ class ProxyApi():
 
 
 
-if __name__ == "__main__":
-    proxy = "46.227.245.119:9027:786691447:3232235686"
-    p = ProxyApi()
-    # p.getPortIp(11)
-    p.getRouterIp(proxy)
+# if __name__ == "__main__":
+#     # proxy in standart format ip:port:log:pass
+#     p = ProxyApi()
+#     p.getRouterIp("")
     
-    p.createProxyConfig()
+    # p.createProxyConfig()
