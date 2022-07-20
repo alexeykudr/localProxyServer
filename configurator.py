@@ -1,4 +1,5 @@
 from distutils.command.config import config
+import subprocess
 
 
 class Configurator():
@@ -31,6 +32,9 @@ class Configurator():
         # file_path = 'sample.cfg'
         with open (file_path, 'w+') as example_conf:
             for line in self.config:
-                example_conf.writelines(line) 
+                example_conf.writelines(line)
+        subprocess.run(["/bin/bash", "/home/{}/localProxyServer/reload_service.sh.sh".format(self.user_login),
+                                 "{}".format(id)],
+                                timeout=5, stdout=subprocess.PIPE, stderr=subprocess.PIPE) 
 # cat 3proxy12.cfg
 # Configurator(22, "el", "pablito").writeConfig()
