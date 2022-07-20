@@ -41,7 +41,7 @@ def rebootPort():
         if id:
             #  need log this
             # get ip
-            print('want reboot {}'.format(id))
+            print('Ребут по ссылке для порта {}'.format(id))
             router_api.rebootRouter(id)
             # get ip
             # check if == then .rebootRouter
@@ -63,7 +63,10 @@ def setConfig():
             username = router_api.get_random_string(8)
             password = router_api.get_random_string(8)
             
-        router_api.createProxyConfig(portId, username, password)
+        try:
+            router_api.createProxyConfig(portId, username, password)
+        except Exception as e:
+            return {portId: f'{username}, {password}'}
 
         return {portId: f'{username}, {password}'}
 
@@ -72,7 +75,7 @@ if __name__ == "__main__":
     router_api = ProxyApi()
 
     port = int(os.environ.get("PORT", 8081))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
 
     # // TODO get ip adres bellow reload and after (python logic) and log this (python logic)
     # // TODO compare ip addr , want to get uniq addr
