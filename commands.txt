@@ -15,4 +15,5 @@ flush
 chmod u+x reconnect.sh
 chmod u+x reload.sh
 sudo chown mac:root localProxyServer/
+sudo chown mac:root app.py
 install python

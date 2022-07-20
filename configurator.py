@@ -18,8 +18,8 @@ class Configurator():
         f"users {self.user_login}:CL:{self.user_password}\n",
         f"allow apple,{self.user_login}\n",
         "allow * 8.8.8.8,2.2.2.2 * * * * * \n",
-        f"proxy -n -a -p7012 -i192.168.0.167 -e192.168.{self.portId}.100\n",
-        f"socks -n -a -p8012 -i192.168.0.167 -e192.168.{self.portId}.100\n",
+        f"proxy -n -a -p70{self.portId-10} -i192.168.0.167 -e192.168.{self.portId}.100\n",
+        f"socks -n -a -p80{self.portId-10} -i192.168.0.167 -e192.168.{self.portId}.100\n",
         "flush\n"
         ]
         
