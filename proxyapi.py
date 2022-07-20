@@ -22,7 +22,7 @@ class ProxyApi():
         
         result = subprocess.run(["/bin/bash", "/home/{}/localProxyServer/reload.sh".format(self.user_login),
                                  "{}".format(id)],
-                                timeout=15, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                                timeout=25, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # response_dict["ip after change"] = self.getRouterIp(id)
         # print(response_dict)
         
