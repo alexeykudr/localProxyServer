@@ -15,12 +15,12 @@ def updatePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
         interval = request.args.get('interval')
-        print(id, interval)
+        print(f"Add new job to crontab with port:{id}, interval:{interval}")
         if id and interval:
             router_api.newJob(id, interval)
             return {id: interval}
 
-        return {"Message": "Bad request!"}
+        return {"Message": "Error"}
 
 
 @app.route('/removePortInterval/', methods=['GET'])
@@ -31,7 +31,7 @@ def removePortInterval():
             router_api.removeJob(id)
             return {"id": id}
 
-        return {"Message": "Bad request!"}
+        return {"Message": "Error"}
 
 
 @app.route('/rebootPort/', methods=['GET'])
@@ -47,17 +47,23 @@ def rebootPort():
             # check if == then .rebootRouter
             return {"id": id}
 
-        return {"Message": "Bad request!"}
+        return {"Message": "Error"}
 
 @app.route('/setConfig', methods=['POST'])
 def setConfig():
     if request.method == 'POST':
         portId = int(request.values.get('id'))
         if portId is None:
-            return {"Message": "Bad request!"}
+            return {"Message": "Bad id!"}
         
-        username = request.values.get('username') # Your form's
+        username = request.values.get('username')
+        if username is None:
+            return {"Message": "Bad username!"}
+        
         password = request.values.get('password') # input names
+        
+        if password is None:
+            return {"Message": "Bad password!"}
         
         if username == 'auto' and password == 'auto':
             username = router_api.get_random_string(8)
