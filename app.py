@@ -17,7 +17,7 @@ def updatePortInterval():
         interval = request.args.get('interval')
         print(id, interval)
         if id and interval:
-            router_api.newJob(id, interval)
+            # router_api.newJob(id, interval)
             return {id: interval}
 
         return {"Message": "Bad request!"}
@@ -28,13 +28,13 @@ def removePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
         if id:
-            router_api.removeJob(id)
+            # router_api.removeJob(id)
             return {"id": id}
 
         return {"Message": "Bad request!"}
 
 
-@app.route('/rebootPort/', methods=['GET'])
+@app.route('/reboot/', methods=['GET'])
 def rebootPort():
     if request.method == 'GET':
         id = request.args.get('id')
@@ -42,7 +42,7 @@ def rebootPort():
             #  need log this
             # get ip
             print('Ребут по ссылке для порта {}'.format(id))
-            router_api.rebootRouter(id)
+            # router_api.rebootRouter(id)
             # get ip
             # check if == then .rebootRouter
             return {"id": id}
@@ -53,22 +53,26 @@ def rebootPort():
 def setConfig():
     if request.method == 'POST':
         portId = int(request.values.get('id'))
+        
         if portId is None:
             return {"Message": "Bad request!"}
         
         username = request.values.get('username') # Your form's
         password = request.values.get('password') # input names
         
+        
+        
         if username == 'auto' and password == 'auto':
             username = router_api.get_random_string(8)
             password = router_api.get_random_string(8)
             
-        try:
-            router_api.createProxyConfig(portId, username, password)
-        except Exception as e:
-            return {portId: f'{username}, {password}'}
+        
+        print(f"Set config port: {portId}, username: {username}, password:{password}")
+    
+        router_api.createProxyConfig(portId, username, password)
+    
 
-        return {portId: f'{username}, {password}'}
+        return {f"{portId}": f"login:{username}, password:{password}"}
 
 
 if __name__ == "__main__":

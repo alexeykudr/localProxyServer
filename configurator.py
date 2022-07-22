@@ -28,15 +28,15 @@ class Configurator():
         
     def writeConfig(self):
         # /usr/local/3proxy/mob/
-        file_path =f"/usr/local/3proxy/mob/3proxy{self.portId-10}.cfg"
-        # file_path = 'sample.cfg'
+        # file_path =f"/usr/local/3proxy/mob/3proxy{self.portId-10}.cfg"
+        file_path = 'sample.cfg'
         with open (file_path, 'w+') as example_conf:
             for line in self.config:
                 example_conf.writelines(line)
                 
-        result = subprocess.run(["/bin/bash", "/home/{}/localProxyServer/reload_service.sh".format(self.user_login),
-                                 "{}".format(id)],
-                                timeout=5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        # result = subprocess.run(["/bin/bash", "/home/{}/localProxyServer/reload_service.sh".format(self.user_login),
+        #                          "{}".format(id)],
+        #                         timeout=5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
 # cat 3proxy12.cfg
 # Configurator(22, "el", "pablito").writeConfig()
