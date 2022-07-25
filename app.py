@@ -41,7 +41,7 @@ def rebootPort():
         if id:
             print('Modem reloading by url {}'.format(id))
             ip1, ip2 = router_api.rebootRouter(id)
-            return {"Ip from to" : {ip1, ip2}}
+            return {"Ip from to" : f'{ip1, ip2}'}
 
         return {"Message": "Error"}
 
