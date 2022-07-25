@@ -66,12 +66,8 @@ class ProxyApi():
         # want get ip addr bellow reload , it will be string
         # response_dict = dict()
         # response_dict["current_ip"] = self.getRouterIp(id)
-        ult = os.system(f"sudo /home/{self.user_login}/reload.sh {id}")
-    #    result = subprocess.run(["sudo /bin/bash", "/home/{}/reload.sh".format(self.user_login),
-     #                            "{}".format(id)],
-      #                          timeout=25, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        # response_dict["ip after change"] = self.getRouterIp(id)
-        # print(response_dict)
+
+        ult = os.system(f"/home/{self.user_login}/reload.sh {id}")
         
         
     def newJob(self, portId: int, interval: int) -> None:
@@ -103,6 +99,3 @@ class ProxyApi():
 
     def createProxyConfig(self, portId, user_log, user_pass):
         config = Configurator(portId, user_log, user_pass)
-        config.writeConfig()
-
-    
