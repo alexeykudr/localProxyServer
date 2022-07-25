@@ -56,27 +56,26 @@ class ProxyApi():
             # print(f'{i+10}:46.227.245.119:700{i}:mama:stiflera')
             
             
-    def getProxyIp(self, proxy_list):
+    def getProxyIp(self, proxy):
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET '
                         'CLR 3.5.30729)'}
         with open('file.txt', 'a') as file:    
-            for proxy in proxy_list:   
-                print(f'Start checking ip! proxy: {proxy}')
-                formated = [proxy.split(":")]
-                proxy_data = formated[0]
-                proxy_dict = {'https': 'http://{}:{}@{}:{}'.format(proxy_data[2],
-                                                                proxy_data[3],
-                                                                proxy_data[0],
-                                                                proxy_data[1])}
-                try:
-                    now = datetime.now()
-                    current_time = now.strftime("%H:%M:%S")
-                    response = requests.get("https://ipinfo.io/ip", headers=headers, proxies=proxy_dict)
-                    file.writelines(f'{current_time} | {response.text} | {proxy_data}\n')
-                except Exception as e:
-                    print(e)
-                    # sleep(15)
+            print(f'Start checking ip! proxy: {proxy}')
+            formated = [proxy.split(":")]
+            proxy_data = formated[0]
+            proxy_dict = {'https': 'http://{}:{}@{}:{}'.format(proxy_data[2],
+                                                            proxy_data[3],
+                                                            proxy_data[0],
+                                                            proxy_data[1])}
+            try:
+                now = datetime.now()
+                current_time = now.strftime("%H:%M:%S")
+                response = requests.get("https://ipinfo.io/ip", headers=headers, proxies=proxy_dict)
+                file.writelines(f'{current_time} | {response.text} | {proxy_data}\n')
+            except Exception as e:
+                print(e)
+                # sleep(15)
         
     def rebootRouter(self, id):
         ip_before_change = self.getProxyIp(list(self.tech_proxy[int(id)]))
