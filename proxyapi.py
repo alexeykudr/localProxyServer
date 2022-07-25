@@ -49,6 +49,18 @@ class ProxyApi():
         self.user_login = os.environ["USER"]
         self.cron = CronTab(user=self.user_login)
 
+        # todo read tech proxies from file
+        
+        self.tech_proxy = dict()
+        
+        for i in range(1, 100):
+            self.tech_proxy[i+10] = f'46.227.245.119:700{i}:mama:stiflera'
+            # print(f'{i+10}:46.227.245.119:700{i}:mama:stiflera')
+        
+
+        
+        
+        
     def rebootRouter(self, id):
         # todo
         # want get ip addr bellow reload , it will be string
@@ -89,30 +101,8 @@ class ProxyApi():
         result_str = ''.join(random.choice(letters) for i in range(length))
         return result_str
 
-    def getRouterIp(self, portId: str):
-        formated = [portId.split(":")]
-        proxy_data = formated[0]
-        proxies = {'https': 'http://{}:{}@{}:{}'.format(proxy_data[2],
-                                                        proxy_data[3],
-                                                        proxy_data[0],
-                                                        proxy_data[1])}
-        headers = {
-            'user-agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET '
-            'CLR 3.5.30729)'}
-        with open('file.txt', 'a') as file:
-            try:
-                ipinfo_response = requests.get("https://ipinfo.io/ip",
-                                               headers=headers, proxies=proxies, timeout=2)
-                file.writelines(f'{ipinfo_response.text}\n')
-                file.close()
-            except Exception as e:
-                ipinfo_response = requests.get("https://ipinfo.io/ip",
-                                               headers=headers, proxies=proxies, timeout=2)
-                file.writelines(f'{ipinfo_response.text}\n')
-                file.close()
-        print(ipinfo_response.text)
-        return ipinfo_response.text
-
     def createProxyConfig(self, portId, user_log, user_pass):
         config = Configurator(portId, user_log, user_pass)
         config.writeConfig()
+
+    
