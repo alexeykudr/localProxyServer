@@ -78,7 +78,7 @@ class ProxyApi():
                 # sleep(15)
         
     def rebootRouter(self, id):
-        ip_before_change = self.getProxyIp(list(self.tech_proxy[int(id)]))
+        ip_before_change = self.getProxyIp(self.tech_proxy[int(id)])
         print(f"Ip before reload {ip_before_change}")
         os.system(f"/home/{self.user_login}/reload.sh {id}")
         
