@@ -39,13 +39,9 @@ def rebootPort():
     if request.method == 'GET':
         id = request.args.get('id')
         if id:
-            #  need log this
-            # get ip
             print('Ребут по ссылке для порта {}'.format(id))
-            router_api.rebootRouter(id)
-            # get ip
-            # check if == then .rebootRouter
-            return {"id": id}
+            ip1, ip2 = router_api.rebootRouter(id)
+            return {"Айпи сменился": f"Прошлый {ip1} , текущий {ip2}"}
 
         return {"Message": "Error"}
 

@@ -1,4 +1,5 @@
 from datetime import datetime
+from http import server
 import json
 import os
 from tabnanny import check
@@ -46,13 +47,19 @@ class ProxyApi():
     def __init__(self) -> None:
         self.user_login = os.environ["USER"]
         self.cron = CronTab(user=self.user_login)
-
+        try:
+            self.server_ip = requests.get("https://ipinfo.io/ip").text
+        except Exception as e:
+            return
+        
+        print(f"Server ip addr is: {self.server_ip}")
+                
         # todo read tech proxies from file
         
+        # init tech proxy
         self.tech_proxy = dict()
-        
         for i in range(1, 100):
-            self.tech_proxy[i+10] = f'46.227.245.119:70{i}:mama:stiflera'
+            self.tech_proxy[i+10] = f'{self.server_ip}:70{i}:mama:stiflera'
             # print(f'{i+10}:46.227.245.119:700{i}:mama:stiflera')
             
             
@@ -77,16 +84,15 @@ class ProxyApi():
     def rebootRouter(self, id):
         proxy_str = self.tech_proxy[int(id)]
         ip1 = self.getIp([proxy_str])
-        print(f"Ip before reload {ip1}")
+        print(f"Ip before reload: {ip1} proxy: {proxy_str}")
         os.system(f"/home/{self.user_login}/reload.sh {id}")
         ip2 = self.getIp([proxy_str])
-        print(f"Ip after reload {ip2}")
+        print(f"Ip after reload {ip2} proxy: {proxy_str}")
+        return (ip1, ip2)
         
         
     def newJob(self, portId: int, interval: int) -> None:
         self.query_command = f"/usr/bin/flock -w 0 /var/run/192.168.{portId}.100.lock /home/{self.user_login}/reconnect.sh -r 4G  -i 192.168.{portId}.1 /etc/init.d/3proxy start192.168.{portId}.1 >/dev/null 2>&1"
-        # self.query_command = "/usr/bin/flock -w 0 /var/run/192.168.{}.100.lock /home/mac/reconnect.sh -r 4G  -i 192.168.{}.1 /etc/init.d/3proxy start192.168.{}.1 >/dev/null 2>&1".format(
-        #     portId, portId, portId)
         self.job = self.cron.new(
             command=self.query_command, comment=str(portId))
         self.job.minute.every(interval)
