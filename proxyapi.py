@@ -79,15 +79,9 @@ class ProxyApi():
         ip1 = self.getIp([proxy_str])
         print(f"Ip before reload {ip1}")
         os.system(f"/home/{self.user_login}/reload.sh {id}")
-        
-
         ip2 = self.getIp([proxy_str])
-        print(f"Ip before reload {ip1}")
+        print(f"Ip after reload {ip2}")
         
-        # a = list(self.tech_proxy[int(id)])
-        # print(a)
-        # # ip_after_change = self.getIp(list(self.tech_proxy[int(id)]))
-        # print(f"Ip after reload {ip_after_change}")
         
     def newJob(self, portId: int, interval: int) -> None:
         self.query_command = f"/usr/bin/flock -w 0 /var/run/192.168.{portId}.100.lock /home/{self.user_login}/reconnect.sh -r 4G  -i 192.168.{portId}.1 /etc/init.d/3proxy start192.168.{portId}.1 >/dev/null 2>&1"
