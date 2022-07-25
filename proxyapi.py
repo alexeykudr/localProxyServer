@@ -62,7 +62,7 @@ class ProxyApi():
                         'CLR 3.5.30729)'}
         with open('file.txt', 'a') as file:    
             print(f'Start checking ip! proxy: {proxy}')
-            formated = [proxy.split(":")]
+            formated = proxy.split(":")
             proxy_data = formated[0]
             proxy_dict = {'https': 'http://{}:{}@{}:{}'.format(proxy_data[2],
                                                             proxy_data[3],
