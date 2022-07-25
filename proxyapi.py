@@ -52,38 +52,38 @@ class ProxyApi():
         self.tech_proxy = dict()
         
         for i in range(1, 100):
-            self.tech_proxy[i+10] = f'46.227.245.119:700{i}:mama:stiflera'
+            self.tech_proxy[i+10] = f'46.227.245.119:70{i}:mama:stiflera'
             # print(f'{i+10}:46.227.245.119:700{i}:mama:stiflera')
             
             
-    def getProxyIp(self, proxy):
+    def getIp(self,proxy_list) -> str:
         headers = {
             'user-agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET '
                         'CLR 3.5.30729)'}
-        with open('file.txt', 'a') as file:    
+        for proxy in proxy_list:   
             print(f'Start checking ip! proxy: {proxy}')
-            formated = proxy.split(":")
+            formated = [proxy.split(":")]
             proxy_data = formated[0]
             proxy_dict = {'https': 'http://{}:{}@{}:{}'.format(proxy_data[2],
                                                             proxy_data[3],
                                                             proxy_data[0],
                                                             proxy_data[1])}
             try:
-                now = datetime.now()
-                current_time = now.strftime("%H:%M:%S")
                 response = requests.get("https://ipinfo.io/ip", headers=headers, proxies=proxy_dict)
-                file.writelines(f'{current_time} | {response.text} | {proxy_data}\n')
+                return response.text
             except Exception as e:
                 print(e)
-                # sleep(15)
         
     def rebootRouter(self, id):
-        ip_before_change = self.getProxyIp(self.tech_proxy[int(id)])
-        print(f"Ip before reload {ip_before_change}")
+        a = self.tech_proxy[int(id)]
+        ip1 = self.getIp([a])
+        print(f"Ip before reload {ip1}")
         os.system(f"/home/{self.user_login}/reload.sh {id}")
         
-        ip_after_change = self.getProxyIp(list(self.tech_proxy[int(id)]))
-        print(f"Ip after reload {ip_after_change}")
+        # a = list(self.tech_proxy[int(id)])
+        # print(a)
+        # # ip_after_change = self.getIp(list(self.tech_proxy[int(id)]))
+        # print(f"Ip after reload {ip_after_change}")
         
     def newJob(self, portId: int, interval: int) -> None:
         self.query_command = f"/usr/bin/flock -w 0 /var/run/192.168.{portId}.100.lock /home/{self.user_login}/reconnect.sh -r 4G  -i 192.168.{portId}.1 /etc/init.d/3proxy start192.168.{portId}.1 >/dev/null 2>&1"
