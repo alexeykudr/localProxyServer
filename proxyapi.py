@@ -23,7 +23,7 @@ class Configurator():
         "auth iponly strong\n",
         "users mama:CL:stiflera\n",
         f"users {self.user_login}:CL:{self.user_password}\n",
-        f"allow apple,{self.user_login}\n",
+        f"allow mama,{self.user_login}\n",
         "allow * 8.8.8.8,2.2.2.2 * * * * * \n",
         f"proxy -n -a -p70{self.portId-10} -i192.168.0.167 -e192.168.{self.portId}.100\n",
         f"socks -n -a -p80{self.portId-10} -i192.168.0.167 -e192.168.{self.portId}.100\n",
@@ -39,10 +39,10 @@ class Configurator():
         with open (file_path, 'w+') as example_conf:
             for line in self.config:
                 example_conf.writelines(line)
-        
-        result = subprocess.run(["sudo /bin/bash", "/home/{}/reload_service.sh".format(self.user_login),
-                                 "{}".format(id)],
-                                timeout=5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        ult = os.system("/home/mac/reload_service.sh")
+        #result = subprocess.run(["sudo /bin/bash", "/home/{}/reload_service.sh".format(self.user_login),
+         #                        "{}".format(id)],
+          #                      timeout=5, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 class ProxyApi():
     # Api to reboot router by reload sh script, add job to cron which give reloading every N min.
     def __init__(self) -> None:
@@ -54,10 +54,10 @@ class ProxyApi():
         # want get ip addr bellow reload , it will be string
         # response_dict = dict()
         # response_dict["current_ip"] = self.getRouterIp(id)
-        
-        result = subprocess.run(["sudo /bin/bash", "/home/{}/reload.sh".format(self.user_login),
-                                 "{}".format(id)],
-                                timeout=25, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        ult = os.system(f"sudo /home/{self.user_login}/reload.sh {id}")
+    #    result = subprocess.run(["sudo /bin/bash", "/home/{}/reload.sh".format(self.user_login),
+     #                            "{}".format(id)],
+      #                          timeout=25, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         # response_dict["ip after change"] = self.getRouterIp(id)
         # print(response_dict)
         
