@@ -39,9 +39,9 @@ def rebootPort():
     if request.method == 'GET':
         id = request.args.get('id')
         if id:
-            print('Ребут по ссылке для порта {}'.format(id))
+            print('Modem reloading by url {}'.format(id))
             ip1, ip2 = router_api.rebootRouter(id)
-            return {"Айпи сменился": f"Прошлый {ip1} , текущий {ip2}"}
+            return {"Ip is change!": f"Before {ip1} , after {ip2}"}
 
         return {"Message": "Error"}
 
