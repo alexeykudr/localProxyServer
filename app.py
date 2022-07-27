@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from flask import request
 from proxyapi import ProxyApi
 import os
@@ -29,7 +29,7 @@ def removePortInterval():
         id = request.args.get('id')
         if id:
             router_api.removeJob(id)
-            return {"id": id}
+            return jsonify({"id": id})
 
         return {"Message": "Error"}
 
@@ -41,9 +41,10 @@ def rebootPort():
         if id:
             print('Modem reloading by url {}'.format(id))
             ip1, ip2 = router_api.rebootRouter(id)
-            return {"Ip from to" : f'{ip1, ip2}'}
+            return jsonify(dict(id = int(id) , ip_before=ip1, ip_after=ip2))
 
         return {"Message": "Error"}
+
 
 @app.route('/setConfig', methods=['POST'])
 def setConfig():
@@ -51,26 +52,26 @@ def setConfig():
         portId = int(request.values.get('id'))
         if portId is None:
             return {"Message": "Bad id!"}
-        
+
         username = request.values.get('username')
         if username is None:
             return {"Message": "Bad username!"}
-        
-        password = request.values.get('password') # input names
-        
+
+        password = request.values.get('password')  # input names
+
         if password is None:
             return {"Message": "Bad password!"}
-        
+
         if username == 'auto' and password == 'auto':
             username = router_api.get_random_string(8)
             password = router_api.get_random_string(8)
-            
+
         try:
             router_api.createProxyConfig(portId, username, password)
         except Exception as e:
-            return {portId: f'{username}, {password}'}
+            return {"Message": "Error"}
 
-        return {portId: f'{username}, {password}'}
+        return jsonify(dict(id=portId, username=username, password=password))
 
 
 if __name__ == "__main__":
