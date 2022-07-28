@@ -18,7 +18,7 @@ def updatePortInterval():
         print(f"Add new job to crontab with port:{id}, interval:{interval}")
         if id and interval:
             router_api.newJob(id, interval)
-            return {id: interval}
+            return jsonify({"id": interval})
 
         return {"Message": "Error"}
 
@@ -41,6 +41,7 @@ def rebootPort():
         if id:
             print('Modem reloading by url {}'.format(id))
             ip1, ip2 = router_api.rebootRouter(id)
+            print(ip1, ip2)
             return jsonify(dict(id = int(id) , ip_before=ip1, ip_after=ip2))
 
         return {"Message": "Error"}

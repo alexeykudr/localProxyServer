@@ -88,7 +88,7 @@ class ProxyApi():
         os.system(f"/home/{self.user_login}/reload.sh {id}")
         ip2 = self.getIp([proxy_str])
         print(f"Ip after reload {ip2} proxy: {proxy_str}")
-        return (ip1, ip2)
+        return ip1, ip2
         
         
     def newJob(self, portId: int, interval: int) -> None:
