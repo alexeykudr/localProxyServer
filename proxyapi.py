@@ -1,15 +1,9 @@
-from datetime import datetime
-from http import server
-import json
 import os
-from tabnanny import check
-from urllib import response
 from crontab import CronTab
-import subprocess
 import random
 import string
 import requests
-
+import urllib3
 
 class Configurator():
     def __init__(self, portId:int, user_login, user_password) -> None:
@@ -28,8 +22,8 @@ class Configurator():
         f"users {self.user_login}:CL:{self.user_password}\n",
         f"allow mama,{self.user_login}\n",
         "allow * 8.8.8.8,2.2.2.2 * * * * * \n",
-        f"proxy -n -a -p70{self.portId-10} -i192.168.0.167 -e192.168.{self.portId}.100\n",
-        f"socks -n -a -p80{self.portId-10} -i192.168.0.167 -e192.168.{self.portId}.100\n",
+        f"proxy -n -a -p70{self.portId} -i192.168.0.167 -e192.168.{self.portId}.100\n",
+        f"socks -n -a -p80{self.portId} -i192.168.0.167 -e192.168.{self.portId}.100\n",
         "flush\n"
         ]
         
@@ -51,6 +45,8 @@ class ProxyApi():
             self.server_ip = requests.get("https://ipinfo.io/ip").text
         except Exception as e:
             return
+        
+        urllib3.disable_warnings()
         
         print(f"Server ip addr is: {self.server_ip}")
                 
@@ -76,7 +72,7 @@ class ProxyApi():
                                                             proxy_data[0],
                                                             proxy_data[1])}
             try:
-                response = requests.get("https://ipinfo.io/ip", headers=headers, proxies=proxy_dict)
+                response = requests.get("https://ipinfo.io/ip", headers=headers, proxies=proxy_dict, verify=False)
                 return response.text
             except Exception as e:
                 print(e)
@@ -85,7 +81,8 @@ class ProxyApi():
         proxy_str = self.tech_proxy[int(id)]
         ip1 = self.getIp([proxy_str])
         print(f"Ip before reload: {ip1} proxy: {proxy_str}")
-        os.system(f"/home/{self.user_login}/reload.sh {id}")
+        os.system("/root/rekonekt.sh -r 4G -i 192.168.22.1")
+        # os.system(f"/home/{self.user_login}/reload.sh {id}")
         ip2 = self.getIp([proxy_str])
         print(f"Ip after reload {ip2} proxy: {proxy_str}")
         return ip1, ip2
