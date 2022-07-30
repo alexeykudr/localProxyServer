@@ -87,7 +87,6 @@ def changeip(name):
         return jsonify(dict(id = int(id) , ip_before=ip1, ip_after=ip2))
     except IndexError:
         print('try to change ip! But shit hapiens, name dont found')
-    conn.close()
 
     return name
 
@@ -99,7 +98,6 @@ def generateLink():
             random_string = ProxyApi.get_random_string(16)
             cur.execute('UPDATE proxyPorts SET generatedURL = ? where id = ?', (random_string, int(id)))
             conn.commit()
-            conn.close()
             return {id:random_string}
 
         return {"Message": "Error"}
