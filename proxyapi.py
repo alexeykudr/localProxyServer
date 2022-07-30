@@ -29,7 +29,7 @@ class Configurator():
         
     def writeConfig(self):
         # /usr/local/3proxy/mob/
-        file_path =f"/usr/local/3proxy/mob/3proxy{self.portId-10}.cfg"
+        file_path =f"/usr/local/3proxy/mob/3proxy{self.portId}.cfg"
         # file_path = 'sample.cfg'
         with open (file_path, 'w+') as example_conf:
             for line in self.config:
@@ -81,7 +81,7 @@ class ProxyApi():
         proxy_str = self.tech_proxy[int(id)]
         ip1 = self.getIp([proxy_str])
         print(f"Ip before reload: {ip1} proxy: {proxy_str}")
-        os.system("/root/rekonekt.sh -r 4G -i 192.168.22.1")
+        os.system(f"/root/rekonekt.sh -r 4G -i 192.168.{id}.1")
         # os.system(f"/home/{self.user_login}/reload.sh {id}")
         ip2 = self.getIp([proxy_str])
         print(f"Ip after reload {ip2} proxy: {proxy_str}")
