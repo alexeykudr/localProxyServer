@@ -15,6 +15,11 @@ def hello():
 def updatePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
+        key = request.args.get('key')
+        if key != const_pass:
+            return {"Message": "Error"}
+        
+        
         interval = request.args.get('interval')
         print(f"Add new job to crontab with port:{id}, interval:{interval}")
         if id and interval:
@@ -28,6 +33,9 @@ def updatePortInterval():
 def removePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
+        key = request.args.get('key')
+        if key != const_pass:
+            return {"Message": "Error"}
         if id:
             router_api.removeJob(id)
             return jsonify({"id": id})
@@ -39,6 +47,9 @@ def removePortInterval():
 def rebootPort():
     if request.method == 'GET':
         id = request.args.get('id')
+        key = request.args.get('key')
+        if key != const_pass:
+            return {"Message": "Error"}
         if id:
             print('Modem reloading by id {}'.format(id))
             ip1, ip2 = router_api.rebootRouter(id)
@@ -52,6 +63,10 @@ def rebootPort():
 def setConfig():
     if request.method == 'POST':
         portId = int(request.values.get('id'))
+        key = request.args.get('key')
+        if key != const_pass:
+            return {"Message": "Error"}
+        
         if portId is None:
             return {"Message": "Bad id!"}
 
@@ -94,6 +109,9 @@ def changeip(name):
 def generateLink():
     if request.method == 'GET':
         id = request.args.get('id')
+        key = request.args.get('key')
+        if key != const_pass:
+            return {"Message": "Error"}
         if id:
             random_string = ProxyApi.get_random_string(16)
             cur.execute('UPDATE proxyPorts SET generatedURL = ? where id = ?', (random_string, int(id)))
@@ -103,6 +121,7 @@ def generateLink():
         return {"Message": "Error"}
 
 if __name__ == "__main__":
+    const_pass = 'guccibeggins'
     router_api = ProxyApi()
     conn = sqlite3.connect('database.db', check_same_thread=False)
     cur = conn.cursor()
