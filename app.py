@@ -106,7 +106,7 @@ def generateLink():
 
 if __name__ == "__main__":
     router_api = ProxyApi()
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('database.db', check_same_thread=False)
     cur = conn.cursor()
     port = int(os.environ.get("PORT", 8081))
     app.run(debug=False, host='0.0.0.0', port=port)
