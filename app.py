@@ -1,3 +1,4 @@
+import sqlite3
 from flask import Flask, jsonify
 from flask import request
 from proxyapi import ProxyApi
@@ -10,7 +11,7 @@ def hello():
     return {"Ok": "True"}
 
 
-@app.route('/updatePortInterval/', methods=['GET'])
+@app.route('/updateinterval', methods=['GET'])
 def updatePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
@@ -23,7 +24,7 @@ def updatePortInterval():
         return {"Message": "Error"}
 
 
-@app.route('/removePortInterval/', methods=['GET'])
+@app.route('/deleteinterval', methods=['GET'])
 def removePortInterval():
     if request.method == 'GET':
         id = request.args.get('id')
@@ -34,12 +35,12 @@ def removePortInterval():
         return {"Message": "Error"}
 
 
-@app.route('/rebootPort/', methods=['GET'])
+@app.route('/changeipID', methods=['GET'])
 def rebootPort():
     if request.method == 'GET':
         id = request.args.get('id')
         if id:
-            print('Modem reloading by url {}'.format(id))
+            print('Modem reloading by id {}'.format(id))
             ip1, ip2 = router_api.rebootRouter(id)
             print(ip1, ip2)
             return jsonify(dict(id = int(id) , ip_before=ip1, ip_after=ip2))
@@ -75,12 +76,37 @@ def setConfig():
         return jsonify(dict(id=portId, username=username, password=password))
 
 
+@app.route('/changeip/<name>')
+def changeip(name):
+    res = cur.execute('SELECT router_id FROM proxyPorts where generatedUrl = ?', (name, )).fetchall()
+    try:
+        id = res[0][0]
+        print('Modem reloading by id {}'.format(id))
+        ip1, ip2 = router_api.rebootRouter(id)
+        print(ip1, ip2)
+        return jsonify(dict(id = int(id) , ip_before=ip1, ip_after=ip2))
+    except IndexError:
+        print('try to change ip! But shit hapiens, name dont found')
+    conn.close()
+
+    return name
+
+@app.route('/generatelink', methods=['GET'])
+def generateLink():
+    if request.method == 'GET':
+        id = request.args.get('id')
+        if id:
+            random_string = ProxyApi.get_random_string(16)
+            cur.execute('UPDATE proxyPorts SET generatedURL = ? where id = ?', (random_string, int(id)))
+            conn.commit()
+            conn.close()
+            return {id:random_string}
+
+        return {"Message": "Error"}
+
 if __name__ == "__main__":
     router_api = ProxyApi()
-
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
     port = int(os.environ.get("PORT", 8081))
     app.run(debug=False, host='0.0.0.0', port=port)
-
-    # // TODO get ip adres bellow reload and after (python logic) and log this (python logic)
-    # // TODO compare ip addr , want to get uniq addr
-    # // TODO generate random log pass

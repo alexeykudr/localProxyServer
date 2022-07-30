@@ -106,8 +106,9 @@ class ProxyApi():
             self.cron.write()
         except Exception as err:
             print("Error in remove job! ", err.args)
-
-    def get_random_string(self, length):
+            
+    @staticmethod
+    def get_random_string(length):
         # choose from all lowercase letter
         letters = string.ascii_lowercase
         result_str = ''.join(random.choice(letters) for i in range(length))
