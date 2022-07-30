@@ -55,7 +55,7 @@ class ProxyApi():
         # init tech proxy
         self.tech_proxy = dict()
         for i in range(1, 100):
-            self.tech_proxy[i+10] = f'{self.server_ip}:70{i}:mama:stiflera'
+            self.tech_proxy[i] = f'{self.server_ip}:70{i}:mama:stiflera'
             # print(f'{i+10}:46.227.245.119:700{i}:mama:stiflera')
             
             
