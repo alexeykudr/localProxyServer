@@ -114,7 +114,7 @@ def generateLink():
             return {"Message": "Error"}
         if id:
             random_string = ProxyApi.get_random_string(16)
-            cur.execute('UPDATE proxyPorts SET generatedURL = ? where id = ?', (random_string, int(id)))
+            cur.execute('UPDATE proxyPorts SET generatedURL = ? where router_id = ?', (random_string, int(id)))
             conn.commit()
             return {id:random_string}
 
