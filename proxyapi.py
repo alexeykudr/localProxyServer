@@ -89,7 +89,8 @@ class ProxyApi():
         
         
     def newJob(self, portId: int, interval: int) -> None:
-        self.query_command = f"/usr/bin/flock -w 0 /var/run/192.168.{portId}.100.lock /home/{self.user_login}/reconnect.sh -r 4G  -i 192.168.{portId}.1 /etc/init.d/3proxy start192.168.{portId}.1 >/dev/null 2>&1"
+        self.query_command = f"/usr/bin/flock -w 0 /var/run/192.168.{portId}.100.lock /root/rekonekt.sh -r 4G  -i 192.168.{portId}.1 && /etc/init.d/3proxy start192.168.{portId}.1 >/dev/null 2>&1"
+        # self.query_command = f"/usr/bin/flock -w 0 /var/run/192.168.{portId}.100.lock /home/{self.user_login}/reconnect.sh -r 4G  -i 192.168.{portId}.1 /etc/init.d/3proxy start192.168.{portId}.1 >/dev/null 2>&1"
         self.job = self.cron.new(
             command=self.query_command, comment=str(portId))
         self.job.minute.every(interval)

@@ -59,9 +59,9 @@ def rebootPort():
         return {"Message": "Error"}
 
 
-@app.route('/setConfig', methods=['POST'])
+@app.route('/setConfig', methods=['GET'])
 def setConfig():
-    if request.method == 'POST':
+    if request.method == 'GET':
         portId = int(request.values.get('id'))
         key = request.args.get('key')
         if key != const_pass:
