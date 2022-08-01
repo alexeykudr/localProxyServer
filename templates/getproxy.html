@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ProxyHobbit</title>
+</head>
+<body>
+    <ol start = "11">
+    {% for proxy, link in proxy.items() %}
+        <li>{{proxy}} - <a href="{{link}}">{{link}}</a></li>
+    {% endfor %}
+    </ol>
+      
+</body>
+</html>

@@ -1,26 +1,40 @@
+import sqlite3
+from turtle import ht
 import requests
 import urllib3
 
 urllib3.disable_warnings()
 
+conn = sqlite3.connect('database.db', check_same_thread=False)
+cur = conn.cursor()
+# res = cur.execute('SELECT router_id FROM proxyPorts where pass NOT IN (?)', ('None', )).fetchall()
+res = cur.execute(
+    'SELECT router_id, user_login, pass, generatedUrl from proxyPorts').fetchall()
 
-def getIp(proxy_list) -> str:
-        headers = {
-            'user-agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET '
-                        'CLR 3.5.30729)'}
-        for proxy in proxy_list:   
-            print(f'Start checking ip! proxy: {proxy}')
-            formated = [proxy.split(":")]
-            proxy_data = formated[0]
-            proxy_dict = {'https': 'http://{}:{}@{}:{}'.format(proxy_data[2],
-                                                            proxy_data[3],
-                                                            proxy_data[0],
-                                                            proxy_data[1])}
-            try:
-                response = requests.get("https://ipinfo.io/ip", headers=headers, proxies=proxy_dict, verify=False)
-                return response.text
-            except Exception as e:
-                print(e)
-                
-ip1 = getIp(["46.227.245.119:7012:mama:stiflera"])
-print(ip1)
+response = requests.get("https://ipinfo.io/ip", verify=False)
+local_ip = response.text
+
+http_proxy_dict = {}
+sock_proxy_dict = {}
+
+for i in res:
+    portId = i[0]
+    user_login = i[1]
+    user_password = i[2]
+    link = i[3]
+    # http://46.227.245.119:8081/changeip/gmxgjpafvkpagsop
+    http_proxy_str = f"{local_ip}:70{portId}:{user_login}:{user_password}"
+    http_proxy_link = f"http://{local_ip}:8881/changeip/{link}"
+    
+    
+    sock_proxy_str = f"{local_ip}:80{portId}:{user_login}:{user_password}"
+    sock_proxy_link = f"http://{local_ip}:8881/changeip/{link}"
+    
+    
+    # http_proxy.append(http_proxy_str)
+    # socks_proxy.append(sock_proxy_str)
+    http_proxy_dict[http_proxy_str] = http_proxy_link
+    sock_proxy_dict[sock_proxy_str] = sock_proxy_link
+    
+
+
