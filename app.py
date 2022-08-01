@@ -1,5 +1,4 @@
 import sqlite3
-from turtle import ht
 from flask import Flask, jsonify, render_template
 from flask import request
 from proxyapi import ProxyApi
