@@ -80,11 +80,14 @@ class ProxyApi():
     def rebootRouter(self, id):
         proxy_str = self.tech_proxy[int(id)]
         ip1 = self.getIp([proxy_str])
-        print(f"Ip before reload: {ip1} proxy: {proxy_str}")
+        
         os.system(f"/root/rekonekt.sh -r 4G -i 192.168.{id}.1")
         # os.system(f"/home/{self.user_login}/reload.sh {id}")
         ip2 = self.getIp([proxy_str])
-        print(f"Ip after reload {ip2} proxy: {proxy_str}")
+        if ip1 == ip2:
+            print(f"Айпи после смены повторился! {ip1} : {ip2} выполняю скрипт реконекта")
+            os.system(f"/root/rekonekt.sh -r 4G -i 192.168.{id}.1")
+        
         return ip1, ip2
         
         
