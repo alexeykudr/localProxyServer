@@ -206,7 +206,7 @@ def getproxy():
             http_proxy_dict[http_proxy_str] = http_proxy_link
             sock_proxy_dict[sock_proxy_str] = sock_proxy_link
             
-        return render_template("getproxy.html", proxy = http_proxy_dict)
+        return render_template("getproxy.html", proxy = http_proxy_dict, socks_proxy = sock_proxy_dict)
         
 
 if __name__ == "__main__":
